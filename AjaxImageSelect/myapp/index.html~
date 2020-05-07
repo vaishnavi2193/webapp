@@ -1,0 +1,16 @@
+<img id="image-id" src="images/unicorn.jpg" />
+<p id="image-text"> the first image</p>
+
+<input id="load-image" type="button" value="load an image"
+       onclick="loadImage()" />
+
+<script type="text/javascript">
+  function loadImage()
+  {
+    var imageE = document.getElementById("image-id");
+    //change image2.jpy to one of your image file names
+    imageE.src = "images/crab.jpg";
+    var pE = document.getElementById("image-text");
+    pE.innerHTML = "the second image";
+  }
+</script>

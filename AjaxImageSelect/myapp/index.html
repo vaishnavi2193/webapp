@@ -1,0 +1,93 @@
+<img id="image-id" src="image/1.jpg" style="width: 500px;"/>
+<p id="image-text"> the first image</p>
+
+<input id="load-image1" type="button" value="load an image"
+       onclick="loadImage()" />
+<input id="load-image2" type="button" value="load an image by Ajax"
+       onclick="loadImgAjax()" />
+<input id="load-image3" type="button" value="load an image by Session"
+       onclick="loadImgSession()" />
+
+<script type="text/javascript">
+  function loadImage(){
+	var imageE = document.getElementById("image-id");
+	imageE.src = "image/2.jpg";
+	var pE = document.getElementById("image-text");
+	pE.innerHTML = "the second image";
+  }
+
+  function getRandInt(max){
+	return Math.floor(Math.random() * Math.floor(max));
+  }
+
+  function loadImgAjax(){
+  	var imageE = document.getElementById("image-id");
+	var pE = document.getElementById("image-text");
+
+	//initiating an XMLHttpRequest
+	var xmlHttpReq = null;
+	if (window.XMLHttpRequest) {
+	  xmlHttpReq = new XMLHttpRequest();
+	}
+	else if (window.ActiveXObject) { // for IE
+	   xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+
+	var url = "http://localhost:8080/app/mapping1";
+	var array = new Array();
+
+	xmlHttpReq.onreadystatechange = function() {
+    if (xmlHttpReq.readyState == 4 && xmlHttpReq.status == 200) {
+	array = xmlHttpReq.responseText.split(',');
+	
+	for(var i=0; i < array.length; i++){
+		if(array[i] == "\n"){
+			array.splice(i, 1);
+		}
+	}
+
+	var resp = array[getRandInt(array.length)];
+	pE.innerHTML = resp;
+	imageE.src = "image/" + resp;
+    	}
+     }
+    //using the get method
+    xmlHttpReq.open('GET', url, true);
+    xmlHttpReq.send();
+}
+
+  function loadImgSession()
+  {
+    var imageE = document.getElementById("image-id");
+    //change image2.jpg to one of your image file names
+    var pE = document.getElementById("image-text");
+
+  //initiating an XMLHttpRequest
+  var xmlHttpReq = null;
+    if (window.XMLHttpRequest) {
+      xmlHttpReq = new XMLHttpRequest();
+    }
+    else if (window.ActiveXObject) { // for IE
+      xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+  //this url retrieves a image file name from the server:
+  var url = "http://localhost:8080/app/mapping";
+
+  //this function is called once the server response is ready
+  xmlHttpReq.onreadystatechange = function() {
+    if (xmlHttpReq.readyState == 4 && xmlHttpReq.status == 200) {
+       pE.innerHTML = xmlHttpReq.responseText;
+       imageE.src = "image/" + xmlHttpReq.responseText;
+	console.log(xmlHttpReq.responseText);
+	if(xmlHttpReq.responseText == ""){
+		imageE.src = "image/1.jpg";
+		pE.innerHTML = "the first image";
+		alert("All sessions complete");
+	}
+    }
+  }
+  //using the get method
+  xmlHttpReq.open('GET', url, true);
+  xmlHttpReq.send();
+  }
+</script>

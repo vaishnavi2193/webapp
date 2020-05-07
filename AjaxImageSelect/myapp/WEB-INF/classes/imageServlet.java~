@@ -1,0 +1,16 @@
+import java.io.*;
+import javax.servlet.http.*;
+import javax.servlet.*;
+
+public class imageServlet extends HttpServlet {
+    public void doGet (HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
+    {
+	File imagePath = new File(getServletContext().getRealPath("/images"));
+	File[] imageFiles = imagePath.listFiles();
+	PrintWriter out = res.getWriter();
+
+	int random = (int)(Math.random() * 3 + 1);
+	
+	out.println(imageFiles[random].getName());
+    }
+}
